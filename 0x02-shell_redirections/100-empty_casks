@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -empty -print "%P\n'
+find . -empty | ls -la
