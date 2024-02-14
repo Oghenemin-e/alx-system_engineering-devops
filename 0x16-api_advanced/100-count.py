@@ -1,50 +1,72 @@
-
-n to count words in all hot posts of a given Reddit subreddit."""
+#!/usr/bin/python3
+"""
+Function that queries the Reddit API and prints
+the top ten hot posts of a subreddit
+"""
+import re
 import requests
+import sys
 
 
-def count_words(subreddit, word_list, count_dict={}, after=None):
-    """Prints counts of given words found in hot posts of a given subreddit.
+def add_title(dictionary, hot_posts):
+    """ Adds item into a list """
+    if len(hot_posts) == 0:
+        return
 
-    Args:
-        subreddit (str): The subreddit to search.
-        word_list (list): The list of words to search for in post titles.
-        instances (obj): Key/value pairs of words/counts.
-        after (str): The parameter for the next page of the API results.
-        count (int): The parameter of results matched thus far.
-    """
-    params = {"limit": 50}
-    if after:
-        params["after"] = after
-    req = requests.get(
-        "https://www.reddit.com/r/{}/hot.json".format(subreddit),
-        headers={
-            "User-Agent": "underscoDe@alx-holbertonschool"},
-        params=params,
-        allow_redirects=False)
-    if req.status_code == 200:
-        posts = req.json().get("data").get("children")
-        for post in posts:
-            title = post.get("data").get("title")
-            word_list = [word.lower() for word in word_list]
-            for word in word_list:
-                w_count = title.split().count(word)
-                if count_dict.get(word):
-                    count_dict[word] += w_count
-                else:
-                    count_dict[word] = w_count
-        if req.json().get("data").get("after"):
-            count_words(
-                subreddit,
-                word_list=word_list,
-                count_dict=count_dict,
-                after=req.json().get("data").get("after"))
-        else:
-            for pair in sorted(
-                    count_dict.items(),
-                    key=lambda kv: (
-                        kv[1],
-                        kv[0]),
-                    reverse=True):
-                if pair[1]:
-                    print("{}: {}".format(pair[0].strip(), pair[1]))
+    title = hot_posts[0]['data']['title'].split()
+    for word in title:
+        for key in dictionary.keys():
+            c = re.compile("^{}$".format(key), re.I)
+            if c.findall(word):
+                dictionary[key] += 1
+    hot_posts.pop(0)
+    add_title(dictionary, hot_posts)
+
+
+def recurse(subreddit, dictionary, after=None):
+    """ Queries to Reddit API """
+    u_agent = 'Mozilla/5.0'
+    headers = {
+        'User-Agent': u_agent
+    }
+
+    params = {
+        'after': after
+    }
+
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    res = requests.get(url,
+                       headers=headers,
+                       params=params,
+                       allow_redirects=False)
+
+    if res.status_code != 200:
+        return None
+
+    dic = res.json()
+    hot_posts = dic['data']['children']
+    add_title(dictionary, hot_posts)
+    after = dic['data']['after']
+    if not after:
+        return
+    recurse(subreddit, dictionary, after=after)
+
+
+def count_words(subreddit, word_list):
+    """ Init function """
+    dictionary = {}
+
+    for word in word_list:
+        dictionary[word] = 0
+
+    recurse(subreddit, dictionary)
+
+    l = sorted(dictionary.items(), key=lambda kv: kv[1])
+    l.reverse()
+
+    if len(l) != 0:
+        for item in l:
+            if item[1] is not 0:
+                print("{}: {}".format(item[0], item[1]))
+    else:
+        print("")
