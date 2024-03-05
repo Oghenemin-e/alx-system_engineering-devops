@@ -1,37 +1,54 @@
-0x16. API advanced
-==================
+0x10. HTTPS SSL
+===============
 
--   By Tim Britton - Cohort #1
+-   By Sylvain Kalache, co-founder at Holberton School
 
-![](https://s3.amazonaws.com/intranet-projects-files/holbertonschool-sysadmin_devops/314/WIxXad8.png)
+#### In a nutshell...
+
+
+Concepts
+--------
+
+*For this project, students are expected to look at these concepts:*
+
+-   [DNS](https://alx-intranet.hbtn.io/concepts/12)
+-   [Web stack debugging](https://alx-intranet.hbtn.io/concepts/68)
+
+![](https://s3.amazonaws.com/intranet-projects-files/holbertonschool-sysadmin_devops/276/FlhGPEK.png)
 
 Background Context
 ------------------
 
-Questions involving APIs are common for interviews. Sometimes they're as simple as 'write a Python script that queries a given endpoint', sometimes they require you to use recursive functions and format/sort the results.
+### What happens when you don't secure your website traffic?
 
-A great API to use for some practice is the Reddit API. There's a lot of endpoints available, many that don't require any form of authentication, and there's tons of information to be parsed out and presented. Getting comfortable with API calls now can save you some face during technical interviews and even outside of the job market, you might find personal use cases to make your life a little bit easier.
+![](https://s3.amazonaws.com/intranet-projects-files/holbertonschool-sysadmin_devops/276/xCmOCgw.gif)
 
 Resources
 ---------
 
 **Read or watch**:
 
--   [Reddit API Documentation](https://alx-intranet.hbtn.io/rltoken/b-4nD6hwEeNYTwYl5yWNwA "Reddit API Documentation")
--   [Query String](https://alx-intranet.hbtn.io/rltoken/luFn_zrgmAQ0OAO_PEI9bA "Query String")
+-   [What is HTTPS?](https://alx-intranet.hbtn.io/rltoken/XT1BAiBL3Jpq1bn1q6IYXQ "What is HTTPS?")
+-   [What are the 2 main elements that SSL is providing](https://alx-intranet.hbtn.io/rltoken/STj5WkAPACBxOvwB77Ycrw "What are the 2 main elements that SSL is providing")
+-   [HAProxy SSL termination on Ubuntu16.04](https://alx-intranet.hbtn.io/rltoken/mJNlqZkTBxIxM2bpDK_VoA "HAProxy SSL termination on Ubuntu16.04")
+-   [SSL termination](https://alx-intranet.hbtn.io/rltoken/CKUICfppIWI6UC0coEMB8g "SSL termination")
+-   [Bash function](https://alx-intranet.hbtn.io/rltoken/zPjZ7-eSSQsLFsGA16C1HQ "Bash function")
+
+**man or help**:
+
+-   `awk`
+-   `dig`
 
 Learning Objectives
 -------------------
 
-At the end of this project, you are expected to be able to [explain to anyone](https://alx-intranet.hbtn.io/rltoken/uDfkZ_HQ_YnelvPnhnBOnw "explain to anyone"), **without the help of Google**:
+At the end of this project, you are expected to be able to [explain to anyone](https://alx-intranet.hbtn.io/rltoken/fJ20wsMngb_yNAhGgBwzlQ "explain to anyone"), **without the help of Google**:
 
 ### General
 
--   How to read API documentation to find the endpoints you're looking for
--   How to use an API with pagination
--   How to parse JSON results from an API
--   How to make a recursive API call
--   How to sort a dictionary by value
+-   What is HTTPS SSL 2 main roles
+-   What is the purpose encrypting traffic
+-   What SSL termination means
 
 Requirements
 ------------
@@ -39,215 +56,201 @@ Requirements
 ### General
 
 -   Allowed editors: `vi`, `vim`, `emacs`
--   All your files will be interpreted/compiled on Ubuntu 14.04 LTS using `python3` (version 3.4.3)
+-   All your files will be interpreted on Ubuntu 16.04 LTS
 -   All your files should end with a new line
--   The first line of all your files should be exactly `#!/usr/bin/python3`
--   Libraries imported in your Python files must be organized in alphabetical order
 -   A `README.md` file, at the root of the folder of the project, is mandatory
--   Your code should use the `PEP 8` style
--   All your files must be executable
--   The length of your files will be tested using `wc`
--   All your modules should have a documentation (`python3 -c 'print(__import__("my_module").__doc__)'`)
--   You must use the Requests module for sending HTTP requests to the Reddit API
+-   All your Bash script files must be executable
+-   Your Bash script must pass `Shellcheck` (version `0.3.7`) without any error
+-   The first line of all your Bash scripts should be exactly `#!/usr/bin/env bash`
+-   The second line of all your Bash scripts should be a comment explaining what is the script doing
+
+Quiz questions
+--------------
+
+**Great!** You've completed the quiz successfully! Keep going! (Show quiz)
+
+Your servers
+------------
+
+| Name | Username | IP | State |\
+ |
+| --- | --- | --- | --- | --- |
+| 1723-web-01 | `ubuntu` | `100.26.181.86` | running |\
+ |
+
+|\
+ |
+| 1723-web-02 | `ubuntu` | `34.238.192.13` | running |\
+ |
+
+|\
+ |
+| 1723-lb-01 | `ubuntu` | `34.239.164.90` | running |\
+ |
+
+|\
+ |
 
 Tasks
 -----
 
-### 0\. How many subs?
+### 0\. World wide web
 
 mandatory
 
 
-Write a function that queries the [Reddit API](https://alx-intranet.hbtn.io/rltoken/b-4nD6hwEeNYTwYl5yWNwA "Reddit API") and returns the number of subscribers (not active users, total subscribers) for a given subreddit. If an invalid subreddit is given, the function should return 0.
-
-Hint: No authentication is necessary for most features of the Reddit API. If you're getting errors related to Too Many Requests, ensure you're setting a custom User-Agent.
+Configure your domain zone so that the subdomain `www` points to your load-balancer IP (`lb-01`). Let's also add other subdomains to make our life easier, and write a Bash script that will display information about subdomains.
 
 Requirements:
 
--   Prototype: `def number_of_subscribers(subreddit)`
--   If not a valid subreddit, return 0.
--   NOTE: Invalid subreddits may return a redirect to search results. Ensure that you are not following redirects.
+-   Add the subdomain `www` to your domain, point it to your `lb-01` IP (your domain name might be configured with default subdomains, feel free to remove them)
+-   Add the subdomain `lb-01` to your domain, point it to your `lb-01` IP
+-   Add the subdomain `web-01` to your domain, point it to your `web-01` IP
+-   Add the subdomain `web-02` to your domain, point it to your `web-02` IP
+-   Your Bash script must accept 2 arguments:
+    1.  `domain`:
+        -   type: string
+        -   what: domain name to audit
+        -   mandatory: yes
+    2.  `subdomain`:
+        -   type: string
+        -   what: specific subdomain to audit
+        -   mandatory: no
+-   Output: `The subdomain [SUB_DOMAIN] is a [RECORD_TYPE] record and points to [DESTINATION]`
+-   When only the parameter `domain` is provided, display information for its subdomains `www`, `lb-01`, `web-01` and `web-02` - in this specific order
+-   When passing `domain` and `subdomain` parameters, display information for the specified subdomain
+-   Ignore `shellcheck` case `SC2086`
+-   Must use:
+    -   `awk`
+    -   at least one Bash function
+-   You do not need to handle edge cases such as:
+    -   Empty parameters
+    -   Nonexistent domain names
+    -   Nonexistent subdomains
+
+Example:
 
 ```
-wintermancer@lapbox ~/reddit_api/project $ cat 0-main.py
-#!/usr/bin/python3
-"""
-0-main
-"""
-import sys
-
-if __name__ == '__main__':
-    number_of_subscribers = __import__('0-subs').number_of_subscribers
-    if len(sys.argv) < 2:
-        print("Please pass an argument for the subreddit to search.")
-    else:
-        print("{:d}".format(number_of_subscribers(sys.argv[1])))
-wintermancer@lapbox ~/reddit_api/project $ python3 0-main.py programming
-756024
-wintermancer@lapbox ~/reddit_api/project $ python3 0-main.py this_is_a_fake_subreddit
-0
+sylvain@ubuntu$ dig www.holberton.online | grep -A1 'ANSWER SECTION:'
+;; ANSWER SECTION:
+www.holberton.online.   87  IN  A   54.210.47.110
+sylvain@ubuntu$ dig lb-01.holberton.online | grep -A1 'ANSWER SECTION:'
+;; ANSWER SECTION:
+lb-01.holberton.online. 101 IN  A   54.210.47.110
+sylvain@ubuntu$ dig web-01.holberton.online | grep -A1 'ANSWER SECTION:'
+;; ANSWER SECTION:
+web-01.holberton.online. 212    IN  A   34.198.248.145
+sylvain@ubuntu$ dig web-02.holberton.online | grep -A1 'ANSWER SECTION:'
+;; ANSWER SECTION:
+web-02.holberton.online. 298    IN  A   54.89.38.100
+sylvain@ubuntu$
+sylvain@ubuntu$
+sylvain@ubuntu$ ./0-world_wide_web holberton.online
+The subdomain www is a A record and points to 54.210.47.110
+The subdomain lb-01 is a A record and points to 54.210.47.110
+The subdomain web-01 is a A record and points to 34.198.248.145
+The subdomain web-02 is a A record and points to 54.89.38.100
+sylvain@ubuntu$
+sylvain@ubuntu$ ./0-world_wide_web holberton.online web-02
+The subdomain web-02 is a A record and points to 54.89.38.100
+sylvain@ubuntu$
 
 ```
 
 **Repo:**
 
 -   GitHub repository: `alx-system_engineering-devops`
--   Directory: `0x16-api_advanced`
--   File: `0-subs.py`
+-   Directory: `0x10-https_ssl`
+-   File: `0-world_wide_web`
 
-### 1\. Top Ten
+### 1\. HAproxy SSL termination
 
 mandatory
 
 
-Write a function that queries the [Reddit API](https://alx-intranet.hbtn.io/rltoken/b-4nD6hwEeNYTwYl5yWNwA "Reddit API") and prints the titles of the first 10 hot posts listed for a given subreddit.
+"Terminating SSL on HAproxy" means that HAproxy is configured to handle encrypted traffic, unencrypt it and pass it on to its destination.
+
+Create a certificate using `certbot` and configure `HAproxy` to accept encrypted traffic for your subdomain `www.`.
 
 Requirements:
 
--   Prototype: `def top_ten(subreddit)`
--   If not a valid subreddit, print None.
--   NOTE: Invalid subreddits may return a redirect to search results. Ensure that you are not following redirects.
+-   HAproxy must be listening on port TCP 443
+-   HAproxy must be accepting SSL traffic
+-   HAproxy must serve encrypted traffic that will return the `/` of your web server
+-   When querying the root of your domain name, the page returned must contain `Holberton School`
+-   Share your HAproxy config as an answer file (`/etc/haproxy/haproxy.cfg`)
+
+The file `1-haproxy_ssl_termination` must be your HAproxy configuration file
+
+Make sure to install HAproxy 1.5 or higher, [SSL termination](https://alx-intranet.hbtn.io/rltoken/CKUICfppIWI6UC0coEMB8g "SSL termination") is not available before v1.5.
+
+Example:
 
 ```
-wintermancer@lapbox ~/reddit_api/project $ cat 1-main.py
-#!/usr/bin/python3
-"""
-1-main
-"""
-import sys
-
-if __name__ == '__main__':
-    top_ten = __import__('1-top_ten').top_ten
-    if len(sys.argv) < 2:
-        print("Please pass an argument for the subreddit to search.")
-    else:
-        top_ten(sys.argv[1])
-wintermancer@lapbox ~/reddit_api/project $ python3 1-main.py programming
-Firebase founder's response to last week's "Firebase Costs increased by 7000%!"
-How a 64k intro is made
-HTTPS on Stack Overflow: The End of a Long Road
-Spend effort on your Git commits
-It's a few years old, but I just discovered this incredibly impressive video of researchers reconstructing sounds from video information alone
-From the D Blog: Introspection, Introspection Everywhere
-Do MVC like it's 1979
-GitHub is moving to GraphQL for v4 of their API (v3 was a REST API)
-Google Bug Bounty - The 5k Error Page
-PyCon 2017 Talk Videos
-wintermancer@lapbox ~/reddit_api/project $ python3 1-main.py this_is_a_fake_subreddit
-None
-wintermancer@lapbox ~/reddit_api/project $
+sylvain@ubuntu$ curl -sI https://www.holberton.online
+HTTP/1.1 200 OK
+Server: nginx/1.4.6 (Ubuntu)
+Date: Tue, 28 Feb 2017 01:52:04 GMT
+Content-Type: text/html
+Content-Length: 30
+Last-Modified: Tue, 21 Feb 2017 07:21:32 GMT
+ETag: "58abea7c-1e"
+X-Served-By: 03-web-01
+Accept-Ranges: bytes
+sylvain@ubuntu$
+sylvain@ubuntu$ curl https://www.holberton.online
+Holberton School for the win!
+sylvain@ubuntu$
 
 ```
 
 **Repo:**
 
 -   GitHub repository: `alx-system_engineering-devops`
--   Directory: `0x16-api_advanced`
--   File: `1-top_ten.py`
+-   Directory: `0x10-https_ssl`
+-   File: `1-haproxy_ssl_termination`
 
-### 2\. Recurse it!
-
-mandatory
-
-
-Write a *recursive function* that queries the [Reddit API](https://alx-intranet.hbtn.io/rltoken/b-4nD6hwEeNYTwYl5yWNwA "Reddit API") and returns a list containing the titles of all hot articles for a given subreddit. If no results are found for the given subreddit, the function should return None.
-
-Hint: The Reddit API uses pagination for separating pages of responses.
-
-Requirements:
-
--   Prototype: `def recurse(subreddit, hot_list=[])`
--   Note: You may change the prototype, but it must be able to be called with just a subreddit supplied. AKA you can add a counter, but it must work without supplying a starting value in the main.
--   If not a valid subreddit, return None.
--   NOTE: Invalid subreddits may return a redirect to search results. Ensure that you are not following redirects.
-
-Your code will NOT pass if you are using a loop and not recursively calling the function! This /can/ be done with a loop but the point is to use a recursive function. :)
-
-```
-wintermancer@lapbox ~/reddit_api/project $ cat 2-main.py
-#!/usr/bin/python3
-"""
-2-main
-"""
-import sys
-
-if __name__ == '__main__':
-    recurse = __import__('2-recurse').recurse
-    if len(sys.argv) < 2:
-        print("Please pass an argument for the subreddit to search.")
-    else:
-        result = recurse(sys.argv[1])
-        if result is not None:
-            print(len(result))
-        else:
-            print("None")
-wintermancer@lapbox ~/reddit_api/project $ python3 2-main.py programming
-932
-wintermancer@lapbox ~/reddit_api/project $ python3 2-main.py this_is_a_fake_subreddit
-None
-
-```
-
-**Repo:**
-
--   GitHub repository: `alx-system_engineering-devops`
--   Directory: `0x16-api_advanced`
--   File: `2-recurse.py`
-
-### 3\. Count it!
+### 2\. No loophole in your website traffic
 
 #advanced
 
 
-Write a *recursive function* that queries the [Reddit API](https://alx-intranet.hbtn.io/rltoken/b-4nD6hwEeNYTwYl5yWNwA "Reddit API"), parses the title of all hot articles, and prints a sorted count of given keywords (case-insensitive, delimited by spaces. `Javascript` should count as `javascript`, but `java` should not).
+A good habit is to enforce HTTPS traffic so that no unencrypted traffic is possible. Configure HAproxy to automatically redirect HTTP traffic to HTTPS.
 
 Requirements:
 
--   Prototype: `def count_words(subreddit, word_list)`
--   Note: You may change the prototype, but it must be able to be called with just a subreddit supplied and a list of keywords. AKA you can add a counter or anything else, but the function must work without supplying a starting value in the main.
--   If `word_list` contains the same word (case-insensitive), the final count should be the sum of each duplicate (example below with `java`)
--   Results should be printed in descending order, by the count, and if the count is the same for separate keywords, they should then be sorted alphabetically (ascending, from A to Z). Words with no matches should be skipped and not printed. Words must be printed in lowercase.
--   Results are based on the number of times a keyword appears, not titles it appears in. `java java java` counts as 3 separate occurrences of `java`.
--   To make life easier, `java.` or `java!` or `java_` should not count as `java`
--   If no posts match or the subreddit is invalid, print nothing.
--   NOTE: Invalid subreddits may return a redirect to search results. Ensure that you are NOT following redirects.
+-   This should be transparent to the user
+-   HAproxy should return a [301](https://alx-intranet.hbtn.io/rltoken/yGdTSvZAzHMnDEhalTjNUw "301")
+-   HAproxy should redirect HTTP traffic to HTTPS
+-   Share your HAproxy config as an answer file (`/etc/haproxy/haproxy.cfg`)
 
-Your code will NOT pass if you are using a loop and not recursively calling the function! This /can/ be done with a loop but the point is to use a recursive function. :)
+The file `100-redirect_http_to_https` must be your HAproxy configuration file
 
-**Disclaimer**: number presented in this example *cannot be accurate now* - Reddit is hot articles are always changing.
+Example:
 
 ```
-bob@dylan $ cat 100-main.py
-#!/usr/bin/python3
-"""
-100-main
-"""
-import sys
+sylvain@ubuntu$ curl -sIL http://www.holberton.online
+HTTP/1.1 301 Moved Permanently
+Content-length: 0
+Location: https://www.holberton.online/
+Connection: close
 
-if __name__ == '__main__':
-    count_words = __import__('100-count').count_words
-    if len(sys.argv) < 3:
-        print("Usage: {} <subreddit> <list of keywords>".format(sys.argv[0]))
-        print("Ex: {} programming 'python java javascript'".format(sys.argv[0]))
-    else:
-        result = count_words(sys.argv[1], [x for x in sys.argv[2].split()])
-bob@dylan $
-bob@dylan $ python3 100-main.py programming 'react python java javascript scala no_results_for_this_one'
-java: 27
-javascript: 20
-python: 17
-react: 17
-scala: 4
-bob@dylan $ python3 100-main.py programming 'JavA java'
-java: 54
-bob@dylan $ python3 100-main.py not_a_valid_subreddit 'python java javascript scala no_results_for_this_one'
-bob@dylan $ python3 100-main.py not_a_valid_subreddit 'python java'
-bob@dylan $
+HTTP/1.1 200 OK
+Server: nginx/1.4.6 (Ubuntu)
+Date: Tue, 28 Feb 2017 02:19:18 GMT
+Content-Type: text/html
+Content-Length: 30
+Last-Modified: Tue, 21 Feb 2017 07:21:32 GMT
+ETag: "58abea7c-1e"
+X-Served-By: 03-web-01
+Accept-Ranges: bytes
+
+sylvain@ubuntu$
 
 ```
 
 **Repo:**
 
 -   GitHub repository: `alx-system_engineering-devops`
--   Directory: `0x16-api_advanced`
--   File: `100-count.py`
+-   Directory: `0x10-https_ssl`
+-   File: `100-redirect_http_to_https`
