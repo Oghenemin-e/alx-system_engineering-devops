@@ -1,17 +1,18 @@
 #!/usr/bin/python3
+# get subs
+from requests import get
+from sys import argv
 
-import requests
 
 def number_of_subscribers(subreddit):
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
-    headers = {'User-Agent': 'custom-user-agent'}
-    
+    """subs"""
+    head = {'User-Agent': 'Dan Kazam'}
+    count = get('https://www.reddit.com/r/{}/about.json'.format(
+        subreddit), headers=head).json()
     try:
-        response = requests.get(url, headers=headers, allow_redirects=False)
-        if response.status_code == 200:
-            data = response.json()
-            return data['data']['subscribers']
-        else:
-            return 0
-    except Exception as e:
+        return count.get('data').get('subscribers')
+    except:
         return 0
+
+if __name__ == "__main__":
+    number_of_subscribers(argv[1])
